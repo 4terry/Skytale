@@ -28,4 +28,9 @@ The information can be accessed only by authorized users because the Administrat
 
 * 4. Indicate the information that should be additionally stored in order to properly access the original data.
 
+- *Encrypted symmetric key*: The symmetric key encrypted with the public key, allowing only the authorized user to decrypt it.
+- *Initialization vector (IV)*: A random value required by the symmetric algorithm to decrypt the data correctly.
+- *Authentication tag or signature*: Data used to verify the integrity of the file and the user's identity.
+- *File metadata*: Basic information such as original filename, file extension, and owner ID.
+
 * 5. Programming language and libraries
