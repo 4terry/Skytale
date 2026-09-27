@@ -19,12 +19,12 @@ The system should meet the following features:
 - *Authentication algorithm*: verifies the identity of the user and passes that information to the administrator.
 
 * 3. Describe the provisional design of the project and explain how the information can be accessed only by the authorized users.
-The provisional design is based on a hybrid cryptographic architecture[span_0](start_span)[span_0](end_span).
-- *Data Encryption*: The Symmetric Encryption Algorithm is used to efficiently encrypt the original Data, producing the Encrypted Data[span_1](start_span)[span_1](end_span).
-- *Key Encapsulation*: The Public Key Encryption Algorithm is used to securely encrypt the symmetric session key[span_2](start_span)[span_2](end_span).
-- *Identity Verification*: The Authentication Algorithm is utilized by the Administrator to verify the User's identity before processing requests[span_3](start_span)[span_3](end_span).
+The provisional design is based on a hybrid cryptographic architecture.
+- *Data Encryption*: The Symmetric Encryption Algorithm is used to efficiently encrypt the original Data, producing the Encrypted Data.
+- *Key Encapsulation*: The Public Key Encryption Algorithm is used to securely encrypt the symmetric session key.
+- *Identity Verification*: The Authentication Algorithm is utilized by the Administrator to verify the User's identity before processing requests.
 
-The information can be accessed only by authorized users because the Administrator strictly controls the access flow through the Authentication Algorithm[span_4](start_span)[span_4](end_span). Even if unauthorized entities intercept the Encrypted Data, they cannot read it without the symmetric key. This key is secured by the Public Key Encryption Algorithm and can be decrypted exclusively by the authorized User possessing the corresponding private key[span_5](start_span)[span_5](end_span).
+The information can be accessed only by authorized users because the Administrator strictly controls the access flow through the Authentication Algorithm. Even if unauthorized entities intercept the Encrypted Data, they cannot read it without the symmetric key. This key is secured by the Public Key Encryption Algorithm and can be decrypted exclusively by the authorized User possessing the corresponding private key.
 
 * 4. Indicate the information that should be additionally stored in order to properly access the original data.
 
@@ -38,3 +38,8 @@ To ensure that authorized users can correctly decrypt and recover the original c
 Storing this additional metadata guarantees that the system can execute the decryption process smoothly without compromising confidentiality or data integrity.
 
 * 5. Programming language and libraries
+The application will be developed in *Python 3*, using the following libraries:
+- *Flask*: creates the web API and handles user requests.
+- *cryptography*: provides AES encryption and decryption to protect file contents.
+- *liboqs-python*: provides ML-KEM (derived from Kyber) for establishing the shared encryption secret, and ML-DSA (derived from Dilithium) for digital signatures used to authenticate users.
+- *secrets*: Python's built-in module for generating cryptographically secure random values, such as authentication challenges.
