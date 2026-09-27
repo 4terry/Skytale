@@ -1,0 +1,25 @@
+#+TITLE: Theory of Codes and Cryptography: Practice 1
+#+AUTHOR: Daniel Nazaruk, Adam Gryniewski, Lucjan Jacek Pucelak, Anas Rakssa Zargaoui
+#+OPTIONS: toc:nil num:nil
+#+LATEX_HEADER: \usepackage[margin=2.5cm]{geometry}
+
+* 1. Provide the diﬀerent features that the system should meet.
+The system should meet the following features:
+- *Confidentiality*: only the person with the key can access the information.
+- *Identiﬁcation or authentication of the entity*: making sure the user trying to decrypt the information is the right person.
+- *Authorization*: Deciding whether you have the right to access the data and granting the right permissions.
+- *Data integrity*: Checking if the data wasn't altered somewhere.
+- *Signature*: It links a specific person to a given data ensuring that the person cannot later claim "I didn't send this".
+
+* 2. Identify and characterize the diﬀerent entities that interact in the system and describe their main features.
+- *User*: person providing data to encrypt or person wanting to decrypt the data.
+- *Administrator*: system manager that coordinates access.
+- *Symmetric encryption algorithm*: the main algorithm responsible for encrypting and decrypting the data.
+- *Public key encryption algorithm*: responsible for encrypting and decrypting the key which the main algorithm uses.
+- *Authentication algorithm*: verifies the identity of the user and passes that information to the administrator.
+
+* 3. Describe the provisional design of the project and explain how the information can be accessed only by the authorized users.
+
+* 4.Indicate the information that should be additionally stored in order to properly access the original data.
+
+* 5. Programming language and libraries
