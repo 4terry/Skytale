@@ -1,6 +1,8 @@
 from io import BytesIO
+import mimetypes
 import os
 from pathlib import Path
+import re
 import secrets
 import struct
 from tempfile import TemporaryDirectory
@@ -27,6 +29,9 @@ AES_BLOCK_SIZE_BITS = 128
 AES_BLOCK_SIZE_BYTES = AES_BLOCK_SIZE_BITS // 8
 HMAC_TAG_SIZE = 32
 CONTAINER_HEADER = struct.Struct(">8sBBBI16s40s16s")
+DUPLICATE_DOWNLOAD_SUFFIX = re.compile(
+    r"^(?P<stem>.+)(?P<extension>\.[A-Za-z0-9]{1,10})_(?P<number>\d+)$"
+)
 
 PAGE = """
 <!doctype html>
@@ -236,6 +241,22 @@ def decrypt_file(
     return output_path
 
 
+def restored_download_name(encrypted_name: str) -> str:
+    """Recover a usable original extension from an encrypted download name."""
+    safe_name = secure_filename(encrypted_name) or "encrypted.enc"
+    if not safe_name.lower().endswith(".enc"):
+        return safe_name + ".decrypted"
+
+    output_name = safe_name[:-4] or "decrypted"
+    duplicate = DUPLICATE_DOWNLOAD_SUFFIX.fullmatch(output_name)
+    if duplicate:
+        output_name = (
+            f"{duplicate.group('stem')}_{duplicate.group('number')}"
+            f"{duplicate.group('extension')}"
+        )
+    return output_name
+
+
 @app.get("/")
 def index():
     return render_template_string(PAGE, error=None)
@@ -291,11 +312,7 @@ def decrypt():
         return render_template_string(PAGE, error="Select a file and enter its password."), 400
 
     safe_name = secure_filename(uploaded.filename) or "encrypted.enc"
-    output_name = (
-        safe_name[:-4]
-        if safe_name.lower().endswith(".enc")
-        else safe_name + ".decrypted"
-    )
+    output_name = restored_download_name(uploaded.filename)
 
     try:
         with TemporaryDirectory(prefix="practice-2-decrypt-") as directory:
@@ -312,7 +329,13 @@ def decrypt():
             PAGE, error="The restored output could not be written safely."
         ), 500
 
-    return send_file(BytesIO(decrypted), as_attachment=True, download_name=output_name)
+    mimetype = mimetypes.guess_type(output_name)[0] or "application/octet-stream"
+    return send_file(
+        BytesIO(decrypted),
+        as_attachment=True,
+        download_name=output_name,
+        mimetype=mimetype,
+    )
 
 
 if __name__ == "__main__":
